@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: talkbuddy
+mistral:
+  api-key: ${MISTRAL_API_KEY}
+groq:
+  api-key: ${GROQ_API_KEY}
+resilience4j:
+  circuitbreaker:
+    instances:
+      buddyApi:
+        failure-rate-threshold: 50        # ouvre le CB si 50% des appels échouent
+        minimum-number-of-calls: 5        # attend 5 appels avant de calculer
+        wait-duration-in-open-state: 10s  # reste ouvert 10s avant de retester
+        sliding-window-size: 10           # fenêtre de 10 appels
