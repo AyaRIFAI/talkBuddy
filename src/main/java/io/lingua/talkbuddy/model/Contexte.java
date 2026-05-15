@@ -11,7 +11,7 @@ public class Contexte {
     private static Contexte instance;
     private final String language;
     private final String nativeLanguage;
-    private List<String> messages;
+    private List<Replique> messages;
     private String messageStandardToLLM;
 
     public void setMessageStandardToLLM(String messageStandardToLLM) {
@@ -39,7 +39,7 @@ public class Contexte {
         
         CORRECTION :
         - Si l'utilisateur ne fait aucune erreur dans son dernier message→ "corrected" a la même valeur que le dernier message de l'utilisateur et "explanation" vaut null
-        - Si l'utilisateur fait des erreurs dans son dernier message→ tu corriges avec bienveillance seulement son dernier message et tu expliques clairement en {{langueMaternelle}} pourquoi c'est une erreur
+        - Si l'utilisateur fait des erreurs dans  son dernier message→ tu corriges avec bienveillance seulement son dernier message et tu expliques clairement en {{langueMaternelle}} pourquoi c'est une erreur
         
         FORMAT DE RÉPONSE OBLIGATOIRE :
         {
@@ -60,16 +60,18 @@ public class Contexte {
         return instance;
     }
 
-    public void updateContexte(List<String> messagesFromClient) {
-        messages=messagesFromClient;
+    public void updateContexte(Replique replique) {
+        messages.add(replique);
+        System.out.println("--------------------------------------------------");
+        System.out.println(messages);
     }
     public String getFinalPrompt(){
-        String msgWithHistory = messageStandardToLLM.replace("{{HISTORIQUE}}", convertirHistoriqueEnTexte(messages));
+        String msgWithHistory = messageStandardToLLM.replace("{{HISTORIQUE}}", messages.toString());
         String msgWithLanguage = msgWithHistory.replace("{{langue}}", language);
         return msgWithLanguage.replace("{{langueMaternelle}}", nativeLanguage);
 
     }
-    private String convertirHistoriqueEnTexte(List<String> messages) {
+    /*private String convertirHistoriqueEnTexte(List<String> messages) {
         if (messages.isEmpty()) {
             return "vide";
         }
@@ -85,5 +87,5 @@ public class Contexte {
             sb.append("\n");
         }
         return sb.toString();
-    }
+    }*/
 }

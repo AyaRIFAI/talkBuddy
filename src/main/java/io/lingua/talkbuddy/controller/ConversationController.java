@@ -1,6 +1,7 @@
 package io.lingua.talkbuddy.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.lingua.talkbuddy.model.MessageFromClient;
 import io.lingua.talkbuddy.model.MessageToClient;
 import io.lingua.talkbuddy.service.ConversationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class ConversationController {
         this.conversationService = conversationService;
     }
     @PostMapping("/conversation")
-    public MessageToClient chatWithBuddy(@RequestBody List<String> messages) {
-        return conversationService.answerClient(messages);
+    public MessageToClient chatWithBuddy(@RequestBody MessageFromClient message) {
+        return conversationService.answerClient(message);
 
     }
 }

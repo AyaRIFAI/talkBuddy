@@ -62,7 +62,7 @@ public class AskGroq implements AskLLM {
         return new MessageToClient(recordFromLLM.reply(), recordFromLLM.translation(), recordFromLLM.correction(),recordFromLLM.explanation(), "Groq");
 
     }
-    public void testappel(){
+   /* public void testappel(){
         Client client = new Client();
         GenerateContentResponse response =
                 client.models.generateContent(
@@ -71,6 +71,6 @@ public class AskGroq implements AskLLM {
                         null);
 
         System.out.println(response.text());
-    }
+    }*/
 
 }
