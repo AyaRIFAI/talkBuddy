@@ -17,18 +17,11 @@ public class TalkbuddyApplication {
 		SpringApplication.run(TalkbuddyApplication.class, args);
 	}
 
-	@Autowired
-	private AskMistral askMistral;
 
-	@Autowired
-	private AskGroq askGroq;
-
-	@Autowired
-	private Contexte contexte;
 	@PostConstruct
 	public void init() throws JsonProcessingException {
-		askMistral.askReply(contexte);
-		askGroq.askReply(contexte);
+		//askMistral.askReply(contexte);
+		//askGroq.askReply(contexte);
 	}
 }
 //	public static void main(String[] args) {

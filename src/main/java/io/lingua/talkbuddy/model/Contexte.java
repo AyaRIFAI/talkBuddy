@@ -9,8 +9,8 @@ import java.util.List;
 public class Contexte {
 
     private static Contexte instance;
-    private final String language;
-    private final String nativeLanguage;
+    private  String language;
+    private  String nativeLanguage;
     private List<Replique> messages;
     private String messageStandardToLLM;
 
@@ -20,8 +20,18 @@ public class Contexte {
 
 
     private Contexte() {
-        this.language = "Espagnol";
-        this.nativeLanguage= "Français";
+
+        this.messages = new ArrayList<>();
+
+    }
+    public static Contexte getInstance() {
+        if (instance == null) {
+            instance = new Contexte(); // créé une seule fois
+        }
+        return instance;
+    }
+    public void initializeContexteMessages() {
+        System.out.println("initillizing");
         this.messages = new ArrayList<>();
         this.messageStandardToLLM = """ 
         Tu es un professeur de {{langue}} bienveillant et engageant.
@@ -52,18 +62,16 @@ public class Contexte {
         Voici le dialogue jusqu'à maintenant :
         {{HISTORIQUE}}
         """;
+        System.out.println(messageStandardToLLM);
     }
-    public static Contexte getInstance() {
-        if (instance == null) {
-            instance = new Contexte(); // créé une seule fois
-        }
-        return instance;
-    }
-
-    public void updateContexte(Replique replique) {
+    public void updateContexteMessages(Replique replique) {
         messages.add(replique);
         System.out.println("--------------------------------------------------");
         System.out.println(messages);
+    }
+    public void updateContexteLanguages(String language, String nativeLanguage) {
+     this.language=language;
+     this.nativeLanguage=nativeLanguage;
     }
     public String getFinalPrompt(){
         String msgWithHistory = messageStandardToLLM.replace("{{HISTORIQUE}}", messages.toString());
