@@ -1,27 +1,27 @@
-package io.lingua.talkbuddy.entity;
+package io.lingua.talkbuddy.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-@Entity
-public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class User {
     private Long userId;
     private String name;
     private String mail;
-    private String languageToLearn;
+    private String language;
     private String nativeLanguage;
-    public UserEntity() {
+
+    public User() {
     }
 
-    public UserEntity(String name, String mail, String languageToLearn, String nativeLanguage) {
-
+    public User(Long userId, String name, String mail, String language, String nativeLanguage) {
+        this.userId = userId;
         this.name = name;
         this.mail = mail;
-        this.languageToLearn = languageToLearn;
+        this.language = language;
+        this.nativeLanguage = nativeLanguage;
+    }
+
+    public User(String name, String mail, String language, String nativeLanguage) {
+        this.name = name;
+        this.mail = mail;
+        this.language = language;
         this.nativeLanguage = nativeLanguage;
     }
 
@@ -49,12 +49,12 @@ public class UserEntity {
         this.mail = mail;
     }
 
-    public String getLanguageToLearn() {
-        return languageToLearn;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setLanguageToLearn(String languageToLearn) {
-        this.languageToLearn = languageToLearn;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public String getNativeLanguage() {

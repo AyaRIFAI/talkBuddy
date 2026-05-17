@@ -1,0 +1,11 @@
+[33mcommit 648497c4b67cc57fd0c2465e68b1b00f4e3d859f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32maddBDD[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m
+Author: ayarifai <rifaiaya2002@gmail.com>
+Date:   Fri May 15 16:36:14 2026 +0200
+
+    Ajout DTO messageFromClient et Replique
+
+[33mcommit 3cbaf77bf3f6f858706700bb4121d03ff26d2038[m
+Author: ayarifai <rifaiaya2002@gmail.com>
+Date:   Fri May 8 21:28:05 2026 +0200
+
+    initial commit : controller + service + model
