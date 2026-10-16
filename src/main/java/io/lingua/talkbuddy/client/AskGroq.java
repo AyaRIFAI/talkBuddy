@@ -32,7 +32,7 @@ public class AskGroq implements AskLLM {
         headers.set("Authorization", "Bearer " + apiKey);
 
         MessageRequest messageRequest = new MessageRequest("user", contexte.getFinalPrompt());
-        Body body = new Body("llama-3.3-70b-versatile", List.of(messageRequest));
+        Body body = new Body("openai/gpt-oss-120b", List.of(messageRequest));
         // 3. Appel
         ObjectMapper mapper = new ObjectMapper();
         System.out.println(mapper.writeValueAsString(body));
@@ -59,7 +59,7 @@ public class AskGroq implements AskLLM {
         RecordFromLLM recordFromLLM = mapper.readValue(cleanJson(content), RecordFromLLM.class);
         System.out.println(recordFromLLM.explanation());
 
-        return new MessageToClient(recordFromLLM.reply(), recordFromLLM.translation(), recordFromLLM.correction(),recordFromLLM.explanation(), "Groq");
+        return new MessageToClient(recordFromLLM.reply(), recordFromLLM.translation(), recordFromLLM.correction(),recordFromLLM.explanation(), contexte.getConversationId(), "Groq");
 
     }
    /* public void testappel(){

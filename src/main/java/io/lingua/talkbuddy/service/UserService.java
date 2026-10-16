@@ -12,7 +12,7 @@ public class UserService {
     UserRepository userRepository;
     public User createUser(User user){
         UserEntity saved=  userRepository.save(new UserEntity(user.getName(), user.getMail(), user.getLanguage(), user.getNativeLanguage()));
-        return new User(saved.getUserId(), saved.getName(), saved.getMail(), saved.getLanguageToLearn(), saved.getNativeLanguage());
-
+        user.setUserId(saved.getUserId());
+        return user;
     }
 }

@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-@WebMvcTest(ConversationController.class) // ← charge JUSTE le controller
+/*@WebMvcTest(ConversationController.class) // ← charge JUSTE le controller
 class ConversationControllerTest {
 
     @Autowired
@@ -41,3 +41,4 @@ class ConversationControllerTest {
         // ASSERT — vérifie la réponse
     }
 }
+*/

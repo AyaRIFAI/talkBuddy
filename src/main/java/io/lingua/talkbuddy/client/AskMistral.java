@@ -60,7 +60,7 @@ import java.util.List;
             RecordFromLLM recordFromLLM = mapper.readValue(cleanJson(content), RecordFromLLM.class);
             System.out.println(recordFromLLM.reply());
 
-           return new MessageToClient(recordFromLLM.reply(), recordFromLLM.translation(), recordFromLLM.correction(), recordFromLLM.explanation(),"Mistral");
+           return new MessageToClient(recordFromLLM.reply(), recordFromLLM.translation(), recordFromLLM.correction(),recordFromLLM.explanation(),contexte.getConversationId(),"Mistral");
 
         }
     }

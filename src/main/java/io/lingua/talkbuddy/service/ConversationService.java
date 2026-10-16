@@ -28,14 +28,15 @@ public class ConversationService {
 
     @Autowired
     private AskGroq askGroq;
-    @Autowired
-    private Contexte contexte;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private ConversationRepository conversationRepository;
     @Autowired
     private MessageRepository messageRepository;
+    @Autowired
+    private LLMCallerService llmCallerService;
 
     public MessageToClient createConversation(Long userId) {
         UserEntity user = userRepository.findById(userId)
@@ -48,41 +49,28 @@ public class ConversationService {
          ConversationEntity conversationEntity = conversationRepository.save(conversation);
         return answerClient(new MessageFromClient(conversationEntity.getConversationId()));
     }
-    public MessageToClient answerClient(MessageFromClient messageFromClient) {
+    public MessageToClient   answerClient(MessageFromClient messageFromClient) {
 
-        contexte.initializeContexteMessages();
+        Contexte contexte= new Contexte();
+
         ConversationEntity conversation = conversationRepository.findById(messageFromClient.getConversationId())
                 .orElseThrow(() -> new RuntimeException("conversation non trouvée"));
         UserEntity userEntity = conversation.getUser();
         System.out.println("userEntity : ");
         System.out.println(userEntity);
         contexte.updateContexteLanguages(userEntity.getLanguageToLearn(), userEntity.getNativeLanguage());
+        contexte.setConversationId(messageFromClient.getConversationId());
         List<MessageEntity> messagesEntities = messageRepository.findAllByConversationOrderByDateAndTime(conversation);
         for (MessageEntity messageEntity:messagesEntities) {
             contexte.updateContexteMessages(new Replique(messageEntity.getAuthor(), messageEntity.getContent()));
         }
         contexte.updateContexteMessages(new Replique("Utilisateur", messageFromClient.getMessage()));
         messageRepository.save(new MessageEntity("Utilisateur", messageFromClient.getMessage(), conversation, LocalDateTime.now()));
-        MessageToClient msgToClient =  callGroq(messageFromClient);
+        MessageToClient msgToClient =  llmCallerService.callGroq(messageFromClient, contexte);
         messageRepository.save(new MessageEntity("Professeur", msgToClient.getAnswerofLLM(), conversation, LocalDateTime.now()));
         contexte.updateContexteMessages(new Replique("Professeur", msgToClient.getAnswerofLLM()));
         return msgToClient;
     }
 
-    @CircuitBreaker(name = "buddyApi", fallbackMethod = "callMistral")
-    public MessageToClient callGroq(MessageFromClient message) {
-        try {
-            return askGroq.askReply(contexte);
 
-        } catch (JsonProcessingException e) {
-            return new MessageToClient("Erreur de parsing", null, null, null, "Groq");
-        }
-    }
-    public MessageToClient callMistral(MessageFromClient message, Throwable t){
-        try {
-           return askMistral.askReply(contexte);
-        } catch (JsonProcessingException e) {
-            return new MessageToClient("Erreur de parsing", null, null,null, "Mistral");
-        }
-    }
 }

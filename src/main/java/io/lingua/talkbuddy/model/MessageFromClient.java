@@ -11,6 +11,10 @@ public class MessageFromClient {
     public MessageFromClient(Long conversationId) {
         this.conversationId=conversationId;
     }
+    public MessageFromClient(String message, Long conversationId) {
+        this.message=message;
+        this.conversationId=conversationId;
+    }
 
     public void setMessage(String message) {
         this.message = message;

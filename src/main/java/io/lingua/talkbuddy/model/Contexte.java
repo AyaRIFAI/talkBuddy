@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class Contexte {
 
     private static Contexte instance;
@@ -13,24 +12,15 @@ public class Contexte {
     private  String nativeLanguage;
     private List<Replique> messages;
     private String messageStandardToLLM;
-
+    private Long conversationId;
     public void setMessageStandardToLLM(String messageStandardToLLM) {
         this.messageStandardToLLM = messageStandardToLLM;
     }
 
 
-    private Contexte() {
 
-        this.messages = new ArrayList<>();
 
-    }
-    public static Contexte getInstance() {
-        if (instance == null) {
-            instance = new Contexte(); // créé une seule fois
-        }
-        return instance;
-    }
-    public void initializeContexteMessages() {
+    public  Contexte() {
         System.out.println("initillizing");
         this.messages = new ArrayList<>();
         this.messageStandardToLLM = """ 
@@ -78,6 +68,13 @@ public class Contexte {
         String msgWithLanguage = msgWithHistory.replace("{{langue}}", language);
         return msgWithLanguage.replace("{{langueMaternelle}}", nativeLanguage);
 
+    }
+    public Long getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(Long conversationId) {
+        this.conversationId = conversationId;
     }
     /*private String convertirHistoriqueEnTexte(List<String> messages) {
         if (messages.isEmpty()) {

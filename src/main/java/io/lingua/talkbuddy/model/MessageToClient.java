@@ -9,16 +9,26 @@ public class MessageToClient {
     private String correctionForUser;
     private String explanationForUser;
     private String provider;
+    private Long conversationId;
+
+    public Long getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(Long conversationId) {
+        this.conversationId = conversationId;
+    }
 
     public MessageToClient() {
 
     }
 
-    public MessageToClient(String answerofLLM, String translationOfLLMAnswer, String correctionForUser,String explanationForUser, String provider) {
+    public MessageToClient(String answerofLLM, String translationOfLLMAnswer, String correctionForUser,String explanationForUser, Long conversationId, String provider) {
         this.answerofLLM = answerofLLM;
         this.translationOfLLMAnswer = translationOfLLMAnswer;
         this.correctionForUser = correctionForUser;
         this.explanationForUser = explanationForUser;
+        this.conversationId=conversationId;
         this.provider = provider;
     }
 
