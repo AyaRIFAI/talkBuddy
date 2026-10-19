@@ -1,8 +1,9 @@
-package io.lingua.talkbuddy.model;
+package io.lingua.talkbuddy.dto;
 
-public class MessageFromClient {
+public record MessageRequest(String content) {
+}
+/*public class MessageFromClient {
     private String message;
-    private Long conversationId;
     public String getMessage() {
         return message;
     }
@@ -27,4 +28,4 @@ public class MessageFromClient {
     public void setConversationId(Long conversationId) {
         this.conversationId = conversationId;
     }
-}
+}*/

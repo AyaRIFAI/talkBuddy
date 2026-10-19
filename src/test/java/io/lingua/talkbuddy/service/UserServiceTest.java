@@ -1,7 +1,7 @@
 package io.lingua.talkbuddy.service;
 
 import io.lingua.talkbuddy.entity.UserEntity;
-import io.lingua.talkbuddy.model.User;
+import io.lingua.talkbuddy.dto.User;
 import io.lingua.talkbuddy.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

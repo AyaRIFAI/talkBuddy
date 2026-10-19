@@ -1,15 +1,13 @@
 package io.lingua.talkbuddy.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.lingua.talkbuddy.client.AskGroq;
 import io.lingua.talkbuddy.client.AskMistral;
 import io.lingua.talkbuddy.entity.ConversationEntity;
 import io.lingua.talkbuddy.entity.MessageEntity;
 import io.lingua.talkbuddy.entity.UserEntity;
 import io.lingua.talkbuddy.model.Contexte;
-import io.lingua.talkbuddy.model.MessageFromClient;
-import io.lingua.talkbuddy.model.MessageToClient;
+import io.lingua.talkbuddy.dto.MessageFromClient;
+import io.lingua.talkbuddy.dto.MessageToClient;
 import io.lingua.talkbuddy.model.Replique;
 import io.lingua.talkbuddy.repository.ConversationRepository;
 import io.lingua.talkbuddy.repository.MessageRepository;
@@ -18,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

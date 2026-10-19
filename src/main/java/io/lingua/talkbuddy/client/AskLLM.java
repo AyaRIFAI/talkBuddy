@@ -2,7 +2,7 @@ package io.lingua.talkbuddy.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.lingua.talkbuddy.model.Contexte;
-import io.lingua.talkbuddy.model.MessageToClient;
+import io.lingua.talkbuddy.dto.MessageToClient;
 
 import java.util.List;
 

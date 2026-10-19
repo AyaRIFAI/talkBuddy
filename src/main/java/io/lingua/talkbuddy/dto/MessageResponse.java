@@ -1,9 +1,11 @@
-package io.lingua.talkbuddy.model;
+package io.lingua.talkbuddy.dto;
 
-import org.springframework.stereotype.Component;
+import java.time.LocalDateTime;
 
-
-public class MessageToClient {
+public record MessageResponse(Long id, Long conversationId, Author author, String content, Correction correction,
+                              String llmResponseTranslation, LocalDateTime createdAt) {
+}
+/*public class MessageToClient {
     private String answerofLLM;
     private String translationOfLLMAnswer;
     private String correctionForUser;
@@ -70,4 +72,4 @@ public class MessageToClient {
     }
 
 
-}
+}*/

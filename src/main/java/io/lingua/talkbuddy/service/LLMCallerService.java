@@ -5,8 +5,8 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.lingua.talkbuddy.client.AskGroq;
 import io.lingua.talkbuddy.client.AskMistral;
 import io.lingua.talkbuddy.model.Contexte;
-import io.lingua.talkbuddy.model.MessageFromClient;
-import io.lingua.talkbuddy.model.MessageToClient;
+import io.lingua.talkbuddy.dto.MessageFromClient;
+import io.lingua.talkbuddy.dto.MessageToClient;
 import org.springframework.stereotype.Service;
 
 @Service

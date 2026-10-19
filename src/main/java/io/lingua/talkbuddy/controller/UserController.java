@@ -1,22 +1,22 @@
 package io.lingua.talkbuddy.controller;
 
-import io.lingua.talkbuddy.entity.UserEntity;
-import io.lingua.talkbuddy.model.MessageToClient;
-import io.lingua.talkbuddy.model.User;
+import io.lingua.talkbuddy.dto.CreateUserRequest;
+import io.lingua.talkbuddy.dto.CreateUserResponse;
 import io.lingua.talkbuddy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "api/v1")
+@RequestMapping(value = "/api/v1/users")
 public class UserController {
     @Autowired
     UserService userService;
-    @PostMapping("/user/new")
+
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody User user) {
-         return userService.createUser(user);
+    public CreateUserResponse createUser(@RequestBody CreateUserRequest user) {
+        return userService.createUser(user);
 
     }
 }

@@ -1,74 +1,74 @@
 package io.lingua.talkbuddy.model;
 
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Contexte {
 
     private static Contexte instance;
-    private  String language;
-    private  String nativeLanguage;
-    private List<Replique> messages;
+    private String language;
+    private String nativeLanguage;
+    private final List<Replique> messages;
     private String messageStandardToLLM;
     private Long conversationId;
+
+    public Contexte() {
+        System.out.println("initillizing");
+        this.messages = new ArrayList<>();
+        this.messageStandardToLLM = """ 
+                Tu es un professeur de {{langue}} bienveillant et engageant.
+                Ton rôle est de pratiquer la conversation en {{langue}} avec l'utilisateur.
+                
+                RÈGLES IMPORTANTES :
+                1. Tu réponds TOUJOURS et UNIQUEMENT en JSON valide — aucun texte en dehors du JSON
+                2. Tu ne réponds jamais en dehors de ce format, même pour t'excuser ou expliquer
+                
+                COMPORTEMENT :
+                - Si la liste des répliques est vide → tu commences la conversation avec une question simple et naturelle en {{langue}}
+                - Si la liste n'est pas vide → tu lis tout le dialogue, tu comprends le contexte, et tu réponds au dernier message de l'utilisateur de façon fluide et naturelle
+                - Tu varies les sujets de conversation : voyages, famille, hobbies, nourriture, culture, actualités...
+                - Tu adaptes la difficulté au niveau apparent de l'utilisateur
+                
+                CORRECTION :
+                - Si l'utilisateur ne fait aucune erreur dans son dernier message→ "corrected" a la même valeur que le dernier message de l'utilisateur et "explanation" vaut null
+                - Si l'utilisateur fait des erreurs dans  son dernier message→ tu corriges avec bienveillance seulement son dernier message et tu expliques clairement en {{langueMaternelle}} pourquoi c'est une erreur
+                
+                FORMAT DE RÉPONSE OBLIGATOIRE :
+                {
+                  "correction": "phrase corrigée"
+                  "explanation": "explication en {{langueMaternelle}} des erreurs, ou null si aucune erreur",
+                  "reply": "ta réponse en {{langue}} + prochaine question",
+                  "translation": "traduction en {{langueMaternelle}} de reply"
+                }
+                
+                Voici le dialogue jusqu'à maintenant :
+                {{HISTORIQUE}}
+                """;
+        System.out.println(messageStandardToLLM);
+    }
+
     public void setMessageStandardToLLM(String messageStandardToLLM) {
         this.messageStandardToLLM = messageStandardToLLM;
     }
 
-
-
-
-    public  Contexte() {
-        System.out.println("initillizing");
-        this.messages = new ArrayList<>();
-        this.messageStandardToLLM = """ 
-        Tu es un professeur de {{langue}} bienveillant et engageant.
-        Ton rôle est de pratiquer la conversation en {{langue}} avec l'utilisateur.
-        
-        RÈGLES IMPORTANTES :
-        1. Tu réponds TOUJOURS et UNIQUEMENT en JSON valide — aucun texte en dehors du JSON
-        2. Tu ne réponds jamais en dehors de ce format, même pour t'excuser ou expliquer
-        
-        COMPORTEMENT :
-        - Si la liste des répliques est vide → tu commences la conversation avec une question simple et naturelle en {{langue}}
-        - Si la liste n'est pas vide → tu lis tout le dialogue, tu comprends le contexte, et tu réponds au dernier message de l'utilisateur de façon fluide et naturelle
-        - Tu varies les sujets de conversation : voyages, famille, hobbies, nourriture, culture, actualités...
-        - Tu adaptes la difficulté au niveau apparent de l'utilisateur
-        
-        CORRECTION :
-        - Si l'utilisateur ne fait aucune erreur dans son dernier message→ "corrected" a la même valeur que le dernier message de l'utilisateur et "explanation" vaut null
-        - Si l'utilisateur fait des erreurs dans  son dernier message→ tu corriges avec bienveillance seulement son dernier message et tu expliques clairement en {{langueMaternelle}} pourquoi c'est une erreur
-        
-        FORMAT DE RÉPONSE OBLIGATOIRE :
-        {
-          "correction": "phrase corrigée"
-          "explanation": "explication en {{langueMaternelle}} des erreurs, ou null si aucune erreur",
-          "reply": "ta réponse en {{langue}} + prochaine question",
-          "translation": "traduction en {{langueMaternelle}} de reply"
-        }
-        
-        Voici le dialogue jusqu'à maintenant :
-        {{HISTORIQUE}}
-        """;
-        System.out.println(messageStandardToLLM);
-    }
     public void updateContexteMessages(Replique replique) {
         messages.add(replique);
         System.out.println("--------------------------------------------------");
         System.out.println(messages);
     }
+
     public void updateContexteLanguages(String language, String nativeLanguage) {
-     this.language=language;
-     this.nativeLanguage=nativeLanguage;
+        this.language = language;
+        this.nativeLanguage = nativeLanguage;
     }
-    public String getFinalPrompt(){
+
+    public String getFinalPrompt() {
         String msgWithHistory = messageStandardToLLM.replace("{{HISTORIQUE}}", messages.toString());
         String msgWithLanguage = msgWithHistory.replace("{{langue}}", language);
         return msgWithLanguage.replace("{{langueMaternelle}}", nativeLanguage);
 
     }
+
     public Long getConversationId() {
         return conversationId;
     }

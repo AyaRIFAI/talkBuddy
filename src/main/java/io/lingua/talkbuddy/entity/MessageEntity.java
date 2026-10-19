@@ -9,7 +9,7 @@ public class MessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String author;
+    private Author author;
     private String content;
     private LocalDateTime dateAndTime;
     @ManyToOne
