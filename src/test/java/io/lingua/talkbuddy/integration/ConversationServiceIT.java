@@ -58,7 +58,7 @@ public class ConversationServiceIT {
         messagesEntities.add(messageFromUser);
         messagesEntities.add(messageFromTeacher2);
 
-        when(messageRepository.findAllByConversationOrderByDateAndTime(any())).thenReturn(messagesEntities);
+        when(messageRepository.findAllByConversationOrderByCreatedAtAsc(any())).thenReturn(messagesEntities);
         // when(messageRepository.save(messageFromTeacher)).thenReturn(messageFromTeacher);
         //when(messageRepository.save(messageFromUser)).thenReturn(messageFromUser);
         MessageFromClient messageFromClient =new MessageFromClient("quiero caminar en la manana!", 1L);

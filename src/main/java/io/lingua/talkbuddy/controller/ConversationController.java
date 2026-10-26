@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/conversations")
 public class ConversationController {
     private final ConversationService conversationService;
 
@@ -16,25 +16,25 @@ public class ConversationController {
         this.conversationService = conversationService;
     }
 
-    @PostMapping("/users/{userId}/conversations")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponse createConversation(@PathVariable Long userId) {
-        return conversationService.createConversation(userId);
+    public MessageResponse createConversation(@RequestBody CreateConversationRequest createConversationRequest) {
+        return conversationService.createConversation(createConversationRequest);
     }
 
-    @GetMapping("/users/{userId}/conversations")
-    public List<ConversationResponse> listConversations(@PathVariable Long userId) {
+    /*@GetMapping
+    public List<ConversationResponse> listConversations(@RequestParam Long userId) {
         return conversationService.listConversations(userId);
-    }
+    }*/
 
-    @PostMapping("/conversations/{conversationId}/messages")
+    @PostMapping("/{conversationId}/messages")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponse sendMessage(@PathVariable Long conversationId, @RequestBody MessageRequest message) {
-        return conversationService.answerClient(message, conversationId);
+    public MessageResponse sendMessage(@PathVariable Long conversationId, @RequestBody SendMessageRequest request) {
+        return conversationService.answerClient(conversationId, request);
     }
 
-    @GetMapping("/conversations/{conversationId}/messages")
+    /*@GetMapping("/{conversationId}/messages")
     public List<MessageResponse> listMessages(@PathVariable Long conversationId) {
         return conversationService.listMessages(conversationId);
-    }
+    }*/
 }

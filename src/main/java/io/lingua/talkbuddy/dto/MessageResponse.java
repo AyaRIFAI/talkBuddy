@@ -1,8 +1,10 @@
 package io.lingua.talkbuddy.dto;
 
+import io.lingua.talkbuddy.model.Sender;
+
 import java.time.LocalDateTime;
 
-public record MessageResponse(Long id, Long conversationId, Author author, String content, Correction correction,
+public record MessageResponse(Long id, Long conversationId, Sender sender, String content, Correction correction,
                               String llmResponseTranslation, LocalDateTime createdAt) {
 }
 /*public class MessageToClient {

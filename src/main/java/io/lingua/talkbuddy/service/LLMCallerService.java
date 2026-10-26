@@ -4,9 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.lingua.talkbuddy.client.AskGroq;
 import io.lingua.talkbuddy.client.AskMistral;
+import io.lingua.talkbuddy.dto.AnswerofLLM;
 import io.lingua.talkbuddy.model.Contexte;
-import io.lingua.talkbuddy.dto.MessageFromClient;
-import io.lingua.talkbuddy.dto.MessageToClient;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,21 +19,21 @@ public class LLMCallerService {
     }
 
     @CircuitBreaker(name = "buddyApi", fallbackMethod = "callMistral")
-    public MessageToClient callGroq(MessageFromClient message, Contexte contexte) {
+    public AnswerofLLM callGroq(Contexte contexte) {
         try {
             return askGroq.askReply(contexte);
 
         } catch (JsonProcessingException e) {
-            return new MessageToClient("Erreur de parsing", null, null, null,null, "Groq");
+            return new AnswerofLLM("Erreur de parsing", null, null, null);
         }
     }
-    public MessageToClient callMistral(MessageFromClient message, Contexte contexte,Throwable t){
+    public AnswerofLLM callMistral(Contexte contexte,Throwable t){
         try {
             //return askMistral.askReply(contexte);
             return askGroq.askReply(contexte);
 
         } catch (JsonProcessingException e) {
-            return new MessageToClient("Erreur de parsing", null, null,null, null, "Mistral");
+            return new AnswerofLLM("Erreur de parsing", null, null,null);
         }
     }
 }

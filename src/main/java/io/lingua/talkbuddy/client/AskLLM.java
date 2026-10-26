@@ -1,17 +1,15 @@
 package io.lingua.talkbuddy.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.lingua.talkbuddy.dto.AnswerofLLM;
 import io.lingua.talkbuddy.model.Contexte;
-import io.lingua.talkbuddy.dto.MessageToClient;
-
 import java.util.List;
 
 public interface AskLLM {
     // Spring générera automatiquement les requêtes sécurisées ici
-    public record MessageRequest(String role, String content) {};
-    public record Body(String model, List<MessageRequest> messages) {};
-    public record RecordFromLLM(String correction, String explanation, String reply, String translation){};
-   public MessageToClient askReply(Contexte contexte) throws JsonProcessingException;
+    //public record MessageRequest(String role, String content) {};
+    //public record Body(String model, List<MessageRequest> messages) {};
+   public AnswerofLLM askReply(Contexte contexte) throws JsonProcessingException;
 
    public default String cleanJson(String rawContent) {
         if (rawContent == null) return null;

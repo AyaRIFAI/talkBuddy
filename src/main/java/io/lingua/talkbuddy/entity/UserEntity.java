@@ -9,28 +9,24 @@ import jakarta.persistence.Id;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
     private String name;
-    private String mail;
+    private String email;
     private String languageToLearn;
     private String nativeLanguage;
+
     public UserEntity() {
     }
 
-    public UserEntity(String name, String mail, String languageToLearn, String nativeLanguage) {
-
+    public UserEntity(String name, String email, String languageToLearn, String nativeLanguage) {
         this.name = name;
-        this.mail = mail;
+        this.email = email;
         this.languageToLearn = languageToLearn;
         this.nativeLanguage = nativeLanguage;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
@@ -41,12 +37,12 @@ public class UserEntity {
         this.name = name;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getLanguageToLearn() {

@@ -8,40 +8,32 @@ import java.time.LocalDateTime;
 public class ConversationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long conversationId;
-    private LocalDateTime startDayTime;
+    private Long id;
+    private LocalDateTime createdAt;
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     public ConversationEntity() {
     }
 
-    public ConversationEntity(LocalDateTime startDayTime, UserEntity user) {
-        this.startDayTime = startDayTime;
+    public ConversationEntity(LocalDateTime createdAt, UserEntity user) {
+        this.createdAt = createdAt;
         this.user = user;
     }
 
-    public Long getConversationId() {
-        return conversationId;
+    public Long getId() {
+        return id;
     }
-
-    public void setConversationId(Long conversationId) {
-        this.conversationId = conversationId;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
-
-    public LocalDateTime getStartDayTime() {
-        return startDayTime;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
-
-    public void setStartDayTime(LocalDateTime startDayTime) {
-        this.startDayTime = startDayTime;
-    }
-
     public UserEntity getUser() {
         return user;
     }
-
     public void setUser(UserEntity user) {
         this.user = user;
     }

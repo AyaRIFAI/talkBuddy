@@ -1,5 +1,8 @@
 package io.lingua.talkbuddy.model;
 
+import io.lingua.talkbuddy.dto.MessageOfConversation;
+import io.lingua.talkbuddy.dto.Message;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,14 +11,16 @@ public class Contexte {
     private static Contexte instance;
     private String language;
     private String nativeLanguage;
-    private final List<Replique> messages;
-    private String messageStandardToLLM;
+    private final List<MessageOfConversation> messageOfConversations;
+    private String messageSystemToLLM;
+    private String messageUserToLLM;
+    private Message message;
     private Long conversationId;
 
     public Contexte() {
         System.out.println("initillizing");
-        this.messages = new ArrayList<>();
-        this.messageStandardToLLM = """ 
+        this.messageOfConversations = new ArrayList<>();
+        this.messageSystemToLLM = """ 
                 Tu es un professeur de {{langue}} bienveillant et engageant.
                 Ton rôle est de pratiquer la conversation en {{langue}} avec l'utilisateur.
                 
@@ -25,13 +30,13 @@ public class Contexte {
                 
                 COMPORTEMENT :
                 - Si la liste des répliques est vide → tu commences la conversation avec une question simple et naturelle en {{langue}}
-                - Si la liste n'est pas vide → tu lis tout le dialogue, tu comprends le contexte, et tu réponds au dernier message de l'utilisateur de façon fluide et naturelle
+                - Si la liste n'est pas vide → tu lis tout le dialogue, tu comprends le contexte, et tu réponds au dernier messageOfConversation de l'utilisateur de façon fluide et naturelle
                 - Tu varies les sujets de conversation : voyages, famille, hobbies, nourriture, culture, actualités...
                 - Tu adaptes la difficulté au niveau apparent de l'utilisateur
                 
                 CORRECTION :
-                - Si l'utilisateur ne fait aucune erreur dans son dernier message→ "corrected" a la même valeur que le dernier message de l'utilisateur et "explanation" vaut null
-                - Si l'utilisateur fait des erreurs dans  son dernier message→ tu corriges avec bienveillance seulement son dernier message et tu expliques clairement en {{langueMaternelle}} pourquoi c'est une erreur
+                - Si l'utilisateur ne fait aucune erreur dans son dernier messageOfConversation→ "corrected" a la même valeur que le dernier messageOfConversation de l'utilisateur et "explanation" vaut null
+                - Si l'utilisateur fait des erreurs dans  son dernier messageOfConversation→ tu corriges avec bienveillance seulement son dernier messageOfConversation et tu expliques clairement en {{langueMaternelle}} pourquoi c'est une erreur
                 
                 FORMAT DE RÉPONSE OBLIGATOIRE :
                 {
@@ -41,20 +46,27 @@ public class Contexte {
                   "translation": "traduction en {{langueMaternelle}} de reply"
                 }
                 
+                """;
+        this.messageUserToLLM = """
+                
                 Voici le dialogue jusqu'à maintenant :
                 {{HISTORIQUE}}
                 """;
-        System.out.println(messageStandardToLLM);
+        System.out.println(messageSystemToLLM);
+        Message message =new Message("system", messageSystemToLLM);
+        Message message2 =new Message("system", messageSystemToLLM);
+
+
     }
 
-    public void setMessageStandardToLLM(String messageStandardToLLM) {
-        this.messageStandardToLLM = messageStandardToLLM;
+    public void setMessageSystemToLLM(String messageSystemToLLM) {
+        this.messageSystemToLLM = messageSystemToLLM;
     }
 
-    public void updateContexteMessages(Replique replique) {
-        messages.add(replique);
+    public void updateContexteMessages(MessageOfConversation messageOfConversation) {
+        messageOfConversations.add(messageOfConversation);
         System.out.println("--------------------------------------------------");
-        System.out.println(messages);
+        System.out.println(messageOfConversations);
     }
 
     public void updateContexteLanguages(String language, String nativeLanguage) {
@@ -62,11 +74,14 @@ public class Contexte {
         this.nativeLanguage = nativeLanguage;
     }
 
-    public String getFinalPrompt() {
-        String msgWithHistory = messageStandardToLLM.replace("{{HISTORIQUE}}", messages.toString());
-        String msgWithLanguage = msgWithHistory.replace("{{langue}}", language);
-        return msgWithLanguage.replace("{{langueMaternelle}}", nativeLanguage);
-
+    public List<Message> getFinalPrompt() {
+        ArrayList<Message> instructions = new ArrayList<>();
+        String messageUserToLLMReady = messageUserToLLM.replace("{{HISTORIQUE}}", messageOfConversations.toString());
+        String msgWithLanguage = messageSystemToLLM.replace("{{langue}}", language);
+        String messageSystemToLLMReady = msgWithLanguage.replace("{{langueMaternelle}}", nativeLanguage);
+        instructions.add(new Message("system", messageSystemToLLMReady));
+        instructions.add(new Message("user", messageUserToLLMReady));
+        return instructions;
     }
 
     public Long getConversationId() {

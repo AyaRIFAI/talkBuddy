@@ -1,5 +1,7 @@
 package io.lingua.talkbuddy.entity;
 
+import io.lingua.talkbuddy.dto.Correction;
+import io.lingua.talkbuddy.model.Sender;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -9,20 +11,28 @@ public class MessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Author author;
+    @Enumerated(EnumType.STRING)
+    private Sender sender;
     private String content;
-    private LocalDateTime dateAndTime;
+    private String correctedText;
+    private String correctionExplanation;
+    private String llmResponseTranslation;
+    private LocalDateTime createdAt;
     @ManyToOne
     @JoinColumn(name = "conversation_id")
     private ConversationEntity conversation;
+
     public MessageEntity() {
     }
 
-    public MessageEntity( String author, String content, ConversationEntity conversation, LocalDateTime dateAndTime) {
-        this.author = author;
+    public MessageEntity(Sender sender, String content, String correctedText, String correctionExplanation,String llmResponseTranslation, ConversationEntity conversation, LocalDateTime createdAt) {
+        this.sender = sender;
         this.content = content;
+        this.correctedText = correctedText;
+        this.correctionExplanation=correctionExplanation;
+        this.llmResponseTranslation=llmResponseTranslation;
         this.conversation = conversation;
-        this.dateAndTime = dateAndTime;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -33,12 +43,12 @@ public class MessageEntity {
         this.id = id;
     }
 
-    public String getAuthor() {
-        return author;
+    public Sender getSender() {
+        return sender;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setSender(Sender sender) {
+        this.sender = sender;
     }
 
     public String getContent() {
@@ -49,12 +59,12 @@ public class MessageEntity {
         this.content = content;
     }
 
-    public LocalDateTime getDateAndTime() {
-        return dateAndTime;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setDateAndTime(LocalDateTime dateAndTime) {
-        this.dateAndTime = dateAndTime;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public ConversationEntity getConversation() {
@@ -63,5 +73,27 @@ public class MessageEntity {
 
     public void setConversation(ConversationEntity conversation) {
         this.conversation = conversation;
+    }
+
+    public void setLlmResponseTranslation(String llmResponseTranslation) {
+        this.llmResponseTranslation = llmResponseTranslation;
+    }
+    public String getCorrectedText() {
+        return correctedText;
+    }
+
+    public void setCorrectedText(String correctedText) {
+        this.correctedText = correctedText;
+    }
+
+    public String getCorrectionExplanation() {
+        return correctionExplanation;
+    }
+
+    public void setCorrectionExplanation(String correctionExplanation) {
+        this.correctionExplanation = correctionExplanation;
+    }
+    public String getLlmResponseTranslation() {
+        return llmResponseTranslation;
     }
 }

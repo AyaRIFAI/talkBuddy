@@ -3,8 +3,9 @@ package io.lingua.talkbuddy.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lingua.talkbuddy.dto.AnswerofLLM;
+import io.lingua.talkbuddy.dto.Body;
 import io.lingua.talkbuddy.model.Contexte;
-import io.lingua.talkbuddy.dto.MessageToClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,15 +23,14 @@ public class AskGroq implements AskLLM {
     private String apiKey;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public MessageToClient askReply(Contexte contexte) throws JsonProcessingException {
+    public AnswerofLLM askReply(Contexte contexte) throws JsonProcessingException {
         System.out.println(apiKey);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         headers.set("Authorization", "Bearer " + apiKey);
 
-        MessageRequest messageRequest = new MessageRequest("user", contexte.getFinalPrompt());
-        Body body = new Body("openai/gpt-oss-120b", List.of(messageRequest));
+        Body body = new Body("openai/gpt-oss-120b", contexte.getFinalPrompt());
         // 3. Appel
         ObjectMapper mapper = new ObjectMapper();
         System.out.println(mapper.writeValueAsString(body));
@@ -54,10 +54,9 @@ public class AskGroq implements AskLLM {
 
         System.out.println(content);
 
-        RecordFromLLM recordFromLLM = mapper.readValue(cleanJson(content), RecordFromLLM.class);
-        System.out.println(recordFromLLM.explanation());
-
-        return new MessageToClient(recordFromLLM.reply(), recordFromLLM.translation(), recordFromLLM.correction(),recordFromLLM.explanation(), contexte.getConversationId(), "Groq");
+        AnswerofLLM answerofLLM = mapper.readValue(cleanJson(content), AnswerofLLM.class);
+        System.out.println(answerofLLM.explanation());
+        return answerofLLM;
 
     }
    /* public void testappel(){

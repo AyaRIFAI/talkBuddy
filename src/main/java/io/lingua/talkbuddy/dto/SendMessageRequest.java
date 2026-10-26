@@ -1,6 +1,6 @@
 package io.lingua.talkbuddy.dto;
 
-public record MessageRequest(String content) {
+public record SendMessageRequest(String content) {
 }
 /*public class MessageFromClient {
     private String message;
